@@ -76,19 +76,35 @@ export function filterNodesInScopeByHasSelector(
   nodes: NodeList,
   selector: string
 ): Node[] {
-  if (selector.trim().slice(0, 1) === '>') {
-    let selectorWithoutDirect = selector
-      .trim()
-      .slice(1)
-      .trim();
-    return Array.from(nodes).filter(node => {
-      return Array.from((<Element>node).children).some(child => {
-        return child.matches(selectorWithoutDirect);
-      });
-    });
-  }
+  let method: Function;
 
-  return Array.from(nodes).filter(node => {
-    return (<Element>node).querySelector(selector);
+  method = selectorHasDirectDescendant(selector)
+    ? filterNodeWithDirectDescendants
+    : filterNode;
+
+  return Array.from(nodes).filter(node => method(<Element>node, selector));
+}
+
+function selectorHasDirectDescendant(selector: string): Boolean {
+  return selector.trim().slice(0, 1) === '>';
+}
+
+function scrubDirectDescendantFromSelector(selector: string): string {
+  return selector
+    .trim()
+    .slice(1)
+    .trim();
+}
+
+function filterNode(node: Element, selector: string): Boolean {
+  return !!node.querySelector(selector);
+}
+
+function filterNodeWithDirectDescendants(
+  node: Element,
+  selector: string
+): Boolean {
+  return Array.from((<Element>node).children).some(child => {
+    return child.matches(scrubDirectDescendantFromSelector(selector));
   });
 }
