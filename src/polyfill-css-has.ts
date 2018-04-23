@@ -1,3 +1,31 @@
+/**
+ * Perform querySelectorAll using the experimental :has() selector, as
+ * defined by MDN.
+ *
+ * @example
+ * const results = querySelectorAll('.container > div:has(> img)');
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/:has
+ * @param selector CSS selector containing :has()
+ * @param dom      Optional element to search. Defaults to document.
+ */
+export default function querySelectorAllWithHas(
+  selector: string,
+  dom?: Element
+): NodeList | Node[] {
+  const node = dom || document;
+
+  const hasSelector = getHasInnerSelector(selector);
+
+  if (!hasSelector) {
+    return node.querySelectorAll(selector);
+  }
+
+  const nodes = getNodesInCurrentScope(node, selector);
+
+  return filterNodesInScopeByHasSelector(nodes, hasSelector as string);
+}
+
 export function getHasInnerSelector(selector: string): string | Boolean {
   const matches = /:has\((.*)\)/.exec(selector);
 
@@ -9,7 +37,7 @@ export function getHasInnerSelector(selector: string): string | Boolean {
 }
 
 export function getNodesInCurrentScope(
-  dom: Document,
+  dom: Element | Document,
   selector: string
 ): NodeList {
   const currentScopeSelector = getCurrentScopeSelector(selector);

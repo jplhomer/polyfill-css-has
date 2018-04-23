@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 
-import {
+import querySelectorAllWithHas, {
   getHasInnerSelector,
   getNodesInCurrentScope,
   filterNodesInScopeByHasSelector
@@ -86,5 +86,65 @@ describe('Filter nodes in scope by has selector', () => {
     );
 
     expect(filteredNodes.length).toBe(1);
+  });
+});
+
+describe('querySelectorAllWithHas', () => {
+  let document;
+
+  beforeEach(() => {
+    const { window } = new JSDOM(`
+      <!DOCTYPE html>
+      <div class="c-entry-content">
+      <p>Hello</p>
+      <div>
+        <figure class="e-image"></figure>
+      </div>
+      <div>
+        <blockquote>Hi there</blockquote>
+      </div>
+      <p>Hey</p.
+    `);
+
+    document = window.document;
+  });
+
+  it('works with has selector', () => {
+    const results = querySelectorAllWithHas(
+      '.c-entry-content > div:has(> .e-image)',
+      document
+    );
+
+    expect(results.length).toBe(1);
+  });
+
+  it('works like normal without has selector', () => {
+    const results = querySelectorAllWithHas('.c-entry-content > p', document);
+
+    expect(results.length).toBe(2);
+  });
+
+  it('works like MDN docs prescribe', () => {
+    const { window } = new JSDOM(`
+      <!DOCTYPE html>
+      <div class="c-entry-content">
+      <p>Hello</p>
+      <a href="#">
+        <img src="" />
+      </a>
+      <div>
+        <figure class="e-image"></figure>
+      </div>
+      <div>
+        <blockquote>Hi there</blockquote>
+      </div>
+      <p>Hey</p.
+    `);
+
+    document = window.document;
+
+    const results = querySelectorAllWithHas('a:has(> img)', document);
+
+    expect(results.length).toBe(1);
   });
 });
