@@ -4,6 +4,9 @@
   "main": "./dist/polyfill-css-has.js",
   "types": "./dist/polyfill-css-has.d.ts",
   "license": "MIT",
+  "engines": {
+    "node": "^8.6.0"
+  },
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
@@ -28,14 +31,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   },
   "dependencies": {
     "core-js": "^2.5.5"
