@@ -2,7 +2,8 @@ import { JSDOM } from 'jsdom';
 
 import {
   getHasInnerSelector,
-  getNodesInCurrentScope
+  getNodesInCurrentScope,
+  filterNodesInScopeByHasSelector
 } from '../src/polyfill-css-has';
 
 describe('Parse CSS selector', () => {
@@ -29,7 +30,7 @@ describe('Get nodes in current scope', () => {
     <div>
       <figure class="e-image"></figure>
     </div>
-    <p>
+    <p>Hey</p>
   `);
 
   const results = getNodesInCurrentScope(
@@ -41,4 +42,49 @@ describe('Get nodes in current scope', () => {
 
   const div = <HTMLElement>results[0];
   expect(div.tagName).toBe('DIV');
+});
+
+describe('Filter nodes in scope by has selector', () => {
+  let document;
+
+  beforeEach(() => {
+    const { window } = new JSDOM(`
+      <!DOCTYPE html>
+      <div class="c-entry-content">
+      <p>Hello</p>
+      <div>
+        <figure class="e-image"></figure>
+      </div>
+      <div>
+        <blockquote>Hi there</blockquote>
+      </div>
+      <p>Hey</p.
+    `);
+
+    document = window.document;
+  });
+
+  it('filters by non-direct selectors', () => {
+    const selector = '.c-entry-content > div:has(.e-image)';
+    const nodes = getNodesInCurrentScope(document, selector);
+    const hasSelector = getHasInnerSelector(selector);
+    const filteredNodes = filterNodesInScopeByHasSelector(
+      nodes,
+      hasSelector as string
+    );
+
+    expect(filteredNodes.length).toBe(1);
+  });
+
+  it('filters by direct selectors', () => {
+    const selector = '.c-entry-content > div:has(> .e-image)';
+    const nodes = getNodesInCurrentScope(document, selector);
+    const hasSelector = getHasInnerSelector(selector);
+    const filteredNodes = filterNodesInScopeByHasSelector(
+      nodes,
+      hasSelector as string
+    );
+
+    expect(filteredNodes.length).toBe(1);
+  });
 });
