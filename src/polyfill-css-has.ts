@@ -14,13 +14,13 @@ import 'core-js/fn/array/from';
 export default function querySelectorAllWithHas(
   selector: string,
   dom?: Element
-): NodeList | Node[] {
+): Node[] {
   const node = dom || document;
 
   const hasSelector = getHasInnerSelector(selector);
 
   if (!hasSelector) {
-    return node.querySelectorAll(selector);
+    return Array.from(node.querySelectorAll(selector));
   }
 
   const nodes = getNodesInCurrentScope(node, selector);

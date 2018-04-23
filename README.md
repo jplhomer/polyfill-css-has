@@ -28,7 +28,7 @@ The Polyfill works by splitting up your selector into two chunks:
 1.  The scope which is to be queried for elements with `:has()` requirements
 1.  The specific selector inside the `:has()` class
 
-Each of the scope-level elements are then filtered by the `:has()` selector and returned in an array or a `NodeList`.
+Each of the scope-level elements are then filtered by the `:has()` selector and returned in an array.
 
 ## Limitations
 
