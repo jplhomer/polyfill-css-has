@@ -5,7 +5,7 @@ This polyfill allows you to query elements using the [CSS `:has()` pseudo-class]
 ## Installation
 
 ```sh
-$ yarn add polyfill-css-has
+yarn add polyfill-css-has
 ```
 
 Then, in your JavaScript:
@@ -18,7 +18,7 @@ var items = querySelectorAllWithHas('.container > p:has(> a)');
 
 // Optionally, pass an element to query against:
 var container = document.querySelector('.container');
-var items = querySelectorAllWithHas('.container > p:has(> a)', container);
+var items = querySelectorAllWithHas('p:has(> a)', container);
 ```
 
 ## How it works
