@@ -21,6 +21,7 @@ module.exports = {
   },
   output: {
     filename: 'polyfill-css-has.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    libraryTarget: 'umd'
   }
 };
