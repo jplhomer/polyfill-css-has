@@ -65,3 +65,7 @@ yarn test
 # Watch for changes with Git:
 yarn test --watch
 ```
+
+## TODO
+
+* Compile Typescript/Webpack better for library consumption. http://marcobotto.com/compiling-and-bundling-typescript-libraries-with-webpack/
